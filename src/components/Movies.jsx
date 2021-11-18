@@ -1,3 +1,4 @@
+import { set } from "lodash";
 import React, { useState, useEffect } from "react";
 import { getMovies } from "../services/fakeMovieService";
 import Like from "./common/Like";
@@ -6,6 +7,7 @@ import Pagination from "./common/Pagination";
 const Movies = () => {
   const [movies, setMovies] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 4;
 
   useEffect(() => {
     setMovies(getMovies());
@@ -26,9 +28,17 @@ const Movies = () => {
     setCurrentPage(page);
   };
 
-  const { length: moviesCount } = movies;
-  if (moviesCount === 0) return <h3>There are no movies in the database</h3>;
+  const paginate = () => {
+    const indexOfLastPage = currentPage * pageSize;
+    const indexOfFirstPage = indexOfLastPage - pageSize;
+    return movies.slice(indexOfFirstPage, indexOfLastPage);
+  };
 
+  const currentPosts = paginate();
+
+  const { length: moviesCount } = movies;
+
+  if (moviesCount === 0) return <h3>There are no movies in the database</h3>;
   return (
     <>
       <h3>
@@ -48,7 +58,7 @@ const Movies = () => {
           </tr>
         </thead>
         <tbody>
-          {movies.map((movie) => (
+          {currentPosts.map((movie) => (
             <tr key={movie._id}>
               <td>{movie.title}</td>
               <td>{movie.genre.name}</td>
@@ -74,7 +84,7 @@ const Movies = () => {
       </table>
       <Pagination
         itemsCount={moviesCount}
-        pageSize={4}
+        pageSize={pageSize}
         onPageChange={handlePageChange}
         currentPage={currentPage}
       />

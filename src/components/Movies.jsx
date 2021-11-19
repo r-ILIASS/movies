@@ -15,7 +15,8 @@ const Movies = () => {
 
   useEffect(() => {
     setMovies(getMovies());
-    setGenres(getGenres());
+    setGenres([{ name: "All Genres" }, ...getGenres()]);
+    // setGenres(getGenres());
   }, []);
 
   const handleDelete = (movie) => {
@@ -35,6 +36,7 @@ const Movies = () => {
 
   const handleGenreSelect = (genre) => {
     setSelectedGenre(genre);
+    setCurrentPage(1);
   };
 
   /// Filter Movies
@@ -42,7 +44,6 @@ const Movies = () => {
     selectedGenre && selectedGenre._id
       ? movies.filter((m) => m.genre._id === selectedGenre._id)
       : movies;
-  console.log("f", filtered);
 
   /// Paginate Movies
   const currentPosts = paginate(currentPage, pageSize, filtered);

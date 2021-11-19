@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import MoviesTable from "./MoviesTable";
 import Like from "./common/Like";
 import Pagination from "./common/Pagination";
 import ListGroup from "./common/ListGroup";
@@ -46,7 +47,7 @@ const Movies = () => {
       : movies;
 
   /// Paginate Movies
-  const currentPosts = paginate(currentPage, pageSize, filtered);
+  const currentMovies = paginate(currentPage, pageSize, filtered);
 
   /// Render
   const { length: moviesCount } = filtered;
@@ -62,47 +63,12 @@ const Movies = () => {
         />
       </div>
       <div className="col">
-        <h3>
-          {moviesCount === 1
-            ? "There is one movie in the database"
-            : `There are ${moviesCount} movies in the database.`}
-        </h3>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Genre</th>
-              <th>Stock</th>
-              <th>Rate</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentPosts.map((movie) => (
-              <tr key={movie._id}>
-                <td>{movie.title}</td>
-                <td>{movie.genre.name}</td>
-                <td>{movie.numberInStock}</td>
-                <td>{movie.dailyRentalRate}</td>
-                <td>
-                  <Like
-                    handleLike={() => handleLike(movie)}
-                    liked={movie.liked}
-                  />
-                </td>
-                <td>
-                  <button
-                    onClick={() => handleDelete(movie)}
-                    className="btn btn-danger btn-sm"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <MoviesTable
+          currentMovies={currentMovies}
+          moviesCount={moviesCount}
+          onLike={handleLike}
+          onDelete={handleDelete}
+        />
         <Pagination
           itemsCount={moviesCount}
           pageSize={pageSize}

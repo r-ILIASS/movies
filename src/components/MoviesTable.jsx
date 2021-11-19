@@ -1,7 +1,25 @@
 import React from "react";
 import Like from "../components/common/Like";
 
-const MoviesTable = ({ currentMovies, moviesCount, onLike, onDelete }) => {
+const MoviesTable = ({
+  currentMovies,
+  moviesCount,
+  sortColumn,
+  onLike,
+  onDelete,
+  onSort,
+}) => {
+  const raiseSort = (path) => {
+    const tmpSortColumn = { ...sortColumn };
+    if (tmpSortColumn.path === path) {
+      tmpSortColumn.order = tmpSortColumn.order === "asc" ? "desc" : "asc";
+    } else {
+      tmpSortColumn.path = path;
+      tmpSortColumn.order = "asc";
+    }
+    onSort(tmpSortColumn);
+  };
+
   return (
     <>
       <h3>
@@ -12,10 +30,10 @@ const MoviesTable = ({ currentMovies, moviesCount, onLike, onDelete }) => {
       <table className="table">
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Genre</th>
-            <th>Stock</th>
-            <th>Rate</th>
+            <th onClick={() => raiseSort("title")}>Title</th>
+            <th onClick={() => raiseSort("genre.name")}>Genre</th>
+            <th onClick={() => raiseSort("numberInStock")}>Stock</th>
+            <th onClick={() => raiseSort("dailyRentalRate")}>Rate</th>
             <th></th>
             <th></th>
           </tr>

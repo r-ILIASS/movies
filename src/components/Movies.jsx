@@ -9,6 +9,7 @@ import { paginate } from "../utils/paginate";
 const Movies = () => {
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 4;
 
@@ -33,20 +34,31 @@ const Movies = () => {
   };
 
   const handleGenreSelect = (genre) => {
-    console.log(genre);
+    setSelectedGenre(genre);
   };
 
-  /// Paginate
-  const currentPosts = paginate(currentPage, pageSize, movies);
+  /// Filter Movies
+  const filtered =
+    selectedGenre && selectedGenre._id
+      ? movies.filter((m) => m.genre._id === selectedGenre._id)
+      : movies;
+  console.log("f", filtered);
 
-  /// render
-  const { length: moviesCount } = movies;
+  /// Paginate Movies
+  const currentPosts = paginate(currentPage, pageSize, filtered);
+
+  /// Render
+  const { length: moviesCount } = filtered;
 
   if (moviesCount === 0) return <h3>There are no movies in the database</h3>;
   return (
     <div className="row">
       <div className="col-2">
-        <ListGroup items={genres} onItemSelect={handleGenreSelect} />
+        <ListGroup
+          items={genres}
+          onItemSelect={handleGenreSelect}
+          selectedItem={selectedGenre}
+        />
       </div>
       <div className="col">
         <h3>

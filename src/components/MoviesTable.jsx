@@ -1,5 +1,6 @@
 import React from "react";
 import TableHeader from "../components/common/TableHeader";
+import TableBody from "./common/TableBody";
 import Like from "../components/common/Like";
 
 const MoviesTable = ({
@@ -15,8 +16,23 @@ const MoviesTable = ({
     { path: "genre.name", label: "Genre" },
     { path: "numberInStock", label: "Stock" },
     { path: "dailyRentalRate", label: "Rate" },
-    { key: "like" },
-    { key: "delete" },
+    {
+      key: "like",
+      content: (movie) => (
+        <Like handleLike={() => onLike(movie)} liked={movie.liked} />
+      ),
+    },
+    {
+      key: "delete",
+      content: (movie) => (
+        <button
+          onClick={() => onDelete(movie)}
+          className="btn btn-danger btn-sm"
+        >
+          Delete
+        </button>
+      ),
+    },
   ];
 
   return (
@@ -32,7 +48,8 @@ const MoviesTable = ({
           sortColumn={sortColumn}
           onSort={onSort}
         />
-        <tbody>
+        <TableBody data={currentMovies} columns={columns} />
+        {/* <tbody>
           {currentMovies.map((movie) => (
             <tr key={movie._id}>
               <td>{movie.title}</td>
@@ -52,7 +69,7 @@ const MoviesTable = ({
               </td>
             </tr>
           ))}
-        </tbody>
+        </tbody> */}
       </table>
     </>
   );

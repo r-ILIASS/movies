@@ -3,13 +3,9 @@ import Joi from "joi-browser";
 import Input from "../components/common/Input";
 
 const useForm = () => {
-  const [data, setData] = useState({ username: "", password: "" });
+  const [data, setData] = useState({});
   const [errors, setErrors] = useState({});
   const [schema, setSchema] = useState({});
-
-  const makeSchema = (schemaObj) => {
-    setSchema(schemaObj);
-  };
 
   const validate = () => {
     const options = { abortEarly: false };
@@ -44,17 +40,13 @@ const useForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e, customSubmit) => {
     e.preventDefault();
     const tmpErrors = validate();
     setErrors(tmpErrors || {});
     if (tmpErrors) return;
     // Call the server
-    loginSubmit();
-  };
-
-  const loginSubmit = () => {
-    console.log("login");
+    customSubmit();
   };
 
   const renderInput = (name, label, type = "text") => {
@@ -63,7 +55,7 @@ const useForm = () => {
         type={type}
         name={name}
         label={label}
-        value={data[name]}
+        value={data[name] || ""}
         onChange={handleChange}
         error={errors[name]}
       />
@@ -83,7 +75,7 @@ const useForm = () => {
     errors,
     handleChange,
     handleSubmit,
-    makeSchema,
+    setSchema,
     validate,
     renderInput,
     renderButton,
